@@ -23,7 +23,7 @@ pipeline {
         stage('Secrets scan') {
           steps {
             container('trufflehog') {
-              sh 'trufflehog ${GIT_URL}'
+              sh 'trufflehog ${GIT_URL} --exclude_paths secrets-exclude.txt'
             }
           }
         }
