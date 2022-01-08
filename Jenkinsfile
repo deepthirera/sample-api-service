@@ -53,7 +53,7 @@ pipeline {
           }
           post {
             always{
-                dependencyCheckPublisherPattern: "target/dependency-check-report.xml"
+                dependencyCheckPublisher pattern: "target/dependency-check-report.xml"
             }
           }
         }
