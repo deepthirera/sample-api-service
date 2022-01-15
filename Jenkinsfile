@@ -57,6 +57,18 @@ pipeline {
             }
           }
         }
+        stage('SAST') {
+          steps {
+            container('maven') {
+              sh './mvnw compile spotbugs:check'
+            }
+          }
+          post {
+            always{
+                dependencyCheckPublisher pattern: "target/spotbugsXml.xml"
+            }
+          }
+        }
       }
     }
     stage('Package') {
