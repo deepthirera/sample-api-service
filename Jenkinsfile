@@ -65,8 +65,7 @@ pipeline {
           }
           post {
             always{
-                dependencyCheckPublisher pattern: "target/spotbugsXml.xml"
-            }
+             recordIssues enabledForFailure: true, tool: spotBugs()
           }
         }
       }
