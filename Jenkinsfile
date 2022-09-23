@@ -24,9 +24,9 @@ pipeline {
           steps {
             container('trufflehog') {
               sh 'git clone ${GIT_URL}'
-              sh 'cd secure-pipeline-java-demo && ls -al'
-              sh 'cd secure-pipeline-java-demo && trufflehog --exclude_paths=./secrets-exclude.txt .'
-              sh 'rm -rf secure-pipeline-java-demo'
+              sh 'cd sample-api-service && ls -al'
+              sh 'cd sample-api-service && trufflehog --exclude_paths=./secrets-exclude.txt .'
+              sh 'rm -rf sample-api-service'
             }
           }
         }
@@ -45,6 +45,18 @@ pipeline {
           steps {
             container('maven') {
               sh './mvnw test'
+            }
+          }
+        }
+        stage('Spot Bugs - Security') {
+          steps {
+            container('maven') {
+              sh 'mvn compile spotbugs:check || exit 0'
+            }
+          }
+          post {
+            always {
+              archiveArtifacts allowEmptyArchive: true, artifacts: 'target/spotbugsXml.xml', fingerprint: true, onlyIfSuccessful: false
             }
           }
         }
