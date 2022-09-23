@@ -20,6 +20,16 @@ pipeline {
             }
           }
         }
+        stage('Secrets scanner') {
+          steps {
+            container('trufflehog') {
+              sh 'git clone ${GIT_URL}'
+              sh 'cd secure-pipeline-java-demo && ls -al'
+              sh 'cd secure-pipeline-java-demo && trufflehog --exclude_paths=./secrets-exclude.txt .'
+              sh 'rm -rf secure-pipeline-java-demo'
+            }
+          }
+        }
       }
     }
     stage('Build') {
